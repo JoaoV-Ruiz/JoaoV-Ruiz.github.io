@@ -1,0 +1,79 @@
+// Conteúdo dos projetos, em ordem de destaque. Para adicionar ou editar, mexa só neste arquivo.
+// Campos opcionais: role, features, shots, liveUrl, liveNote, repoUrl.
+const PROJECTS = [
+  {
+    title: "Volley Tech",
+    tagline: "App de gestão para clube de vôlei",
+    category: "React Native · Supabase",
+    role: "Full-stack, projeto solo",
+    description:
+      "App mobile/web para um clube de vôlei de Pelotas. O treinador gerencia elenco, treinos, presenças, scout dos jogos e feedback individual; atletas e responsáveis veem as próprias estatísticas, avisos e mensalidades. Publicado como app instalável pelo navegador, sem precisar de loja.",
+    features: [
+      "Quatro perfis de acesso (administrador, treinador, atleta e responsável), com vínculo por código de convite",
+      "Scout dos jogos ao vivo: saque, recepção, ataque, bloqueio e defesa, com placar automático por set",
+      "Treinos com confirmação de presença e feedback individual (técnica, tática, físico e atitude)",
+      "Desempenho do atleta juntando médias de feedback e números de scout",
+      "Enquete de disponibilidade para campeonatos, avisos e elenco com numeração",
+      "Mensalidades espelhadas da API do Asaas via webhook (integração pronta, hoje desligada por feature flag)",
+    ],
+    stack: ["React Native", "Expo Router", "Supabase", "Row Level Security", "Edge Functions", "TanStack Query", "TypeScript"],
+    image: "img/volleytech/00_capa.jpg",
+    imageAlt: "Três telas do app Volley Tech: início, jogo e desempenho do atleta",
+    shots: [
+      { src: "img/volleytech/07_jogo.jpg", caption: "Jogo com estatísticas de scout" },
+      { src: "img/volleytech/08_scout.jpg", caption: "Scout ao vivo, lance a lance por atleta" },
+      { src: "img/volleytech/06_feedback.jpg", caption: "Feedback individual por treino" },
+      { src: "img/volleytech/04_treino.jpg", caption: "Confirmação de presença no treino" },
+    ],
+    liveUrl: "https://app.volleytechpelotas.com",
+    liveNote: "exige login",
+  },
+  {
+    title: "Amazon Veículos Locadora",
+    tagline: "Landing pages + CRM de leads",
+    category: "React · Supabase",
+    role: "Cliente freelance · Manaus/AM",
+    description:
+      "Site e CRM para uma locadora que aluga carros para motoristas de aplicativo em Manaus. Páginas específicas para motoristas iniciantes e veteranos captam leads por formulário e WhatsApp; a equipe de vendas acompanha cada lead numa área de CRM e o administrador mantém o catálogo da frota atualizado.",
+    features: [
+      "Landing de motorista iniciante (formulário) e de veterano (WhatsApp + formulário)",
+      "CRM interno com leads, dashboard administrativo, frota editável e conversão",
+      "Site em português, inglês e espanhol, com tema claro e escuro",
+    ],
+    stack: ["React 19", "TanStack Start", "Vite", "Tailwind CSS", "shadcn/ui", "Framer Motion", "Zod", "Supabase", "Cloudflare Workers"],
+    image: "img/amazon-locadora/00_capa_locadora.jpg",
+    imageAlt: "Página inicial da Amazon Veículos Locadora em desktop e celular",
+    shots: [
+      { src: "img/amazon-locadora/loc_desktop_numeros.jpg", caption: "Seção de números, desktop", wide: true },
+      { src: "img/amazon-locadora/loc_mobile_iniciante.jpg", caption: "Landing do motorista iniciante" },
+    ],
+    liveUrl: "https://amazonveiculoslocadora.com",
+  },
+  {
+    title: "Amazon Veículos Estoque",
+    tagline: "Plataforma de estoque e revenda",
+    category: "React · Node.js",
+    role: "Cliente freelance · Manaus/AM",
+    description:
+      "Plataforma de estoque para uma revenda de carros. Clientes navegam pelo estoque sem login; administradores gerenciam veículos, leads, parceiros e consignações; lojistas parceiros têm acesso estendido com placa e histórico de manutenção.",
+    stack: ["React", "Vite", "TypeScript", "Tailwind CSS", "Node.js", "Fastify", "Supabase", "Cloudflare"],
+    image: "img/amazon-estoque/00_capa_repasse.jpg",
+    imageAlt: "Página inicial da Amazon Veículos em desktop e celular",
+    shots: [
+      { src: "img/amazon-estoque/rep_desktop_estoque.jpg", caption: "Listagem do estoque, desktop", wide: true },
+      { src: "img/amazon-estoque/rep_mobile_hero.jpg", caption: "Página inicial no celular" },
+    ],
+    liveUrl: "https://amazonveiculos.com",
+  },
+  {
+    title: "Assistente Pessoal Carla",
+    tagline: "Assistente educacional com IA",
+    category: "Python · IA",
+    role: "Projeto pessoal",
+    description:
+      "Desenvolvida para apoiar profissionais da educação, a Carla automatiza a criação de materiais de apoio, planos de aula e exercícios personalizados. Usa a API do Gemini para gerar o conteúdo, n8n para orquestrar o fluxo e Google Sheets como base de conhecimento e registro das atividades.",
+    stack: ["Gemini AI", "Python", "n8n", "Streamlit", "Google Sheets"],
+    liveUrl: "https://assistente-carla.streamlit.app/",
+    repoUrl: "https://github.com/JoaoV-Ruiz/assistentePessoalCarla",
+  },
+];
