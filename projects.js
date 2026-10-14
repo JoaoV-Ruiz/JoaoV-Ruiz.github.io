@@ -1,5 +1,5 @@
 // Conteúdo dos projetos, em ordem de destaque. Para adicionar ou editar, mexa só neste arquivo.
-// Campos opcionais: role, features, shots, wideCover, liveUrl, liveNote, repoUrl, fileUrl.
+// Campos opcionais: role, features, shots, wideCover, liveUrl, liveNote, repoUrl, fileUrl, hireUrl.
 const PROJECTS = [
   {
     title: "Volley Tech",
@@ -83,6 +83,8 @@ const PROJECTS = [
     imageAlt: "Canvas do n8n com o fluxo de lembrete de cobrança, em seis etapas anotadas",
     wideCover: true,
     fileUrl: "n8n/lembrete-cobranca-whatsapp.json",
+    hireUrl:
+      "https://www.upwork.com/services/product/development-it-a-custom-n8n-workflow-that-automates-a-repetitive-task-in-your-business-2110171077117765805",
   },
   {
     title: "Assistente Pessoal Carla",

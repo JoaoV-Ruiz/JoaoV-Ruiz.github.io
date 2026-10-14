@@ -26,6 +26,7 @@ list.innerHTML = PROJECTS.map((p, i) => {
         ${p.features ? `<ul class="p-features">${p.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
         <ul class="p-stack" aria-label="Tecnologias">${p.stack.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
         <p class="p-links">
+          ${p.hireUrl ? `<a href="${esc(p.hireUrl)}" target="_blank" rel="noopener">Contratar no Upwork <span aria-hidden="true">↗</span></a>` : ""}
           ${p.liveUrl ? `<a href="${esc(p.liveUrl)}" target="_blank" rel="noopener">Abrir projeto <span aria-hidden="true">↗</span></a>${p.liveNote ? `<span class="p-note">${esc(p.liveNote)}</span>` : ""}` : ""}
           ${p.repoUrl ? `<a href="${esc(p.repoUrl)}" target="_blank" rel="noopener">Código no GitHub <span aria-hidden="true">↗</span></a>` : ""}
           ${p.fileUrl ? `<a href="${esc(p.fileUrl)}" download>Baixar o fluxo (JSON) <span aria-hidden="true">↓</span></a>` : ""}
