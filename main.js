@@ -19,8 +19,8 @@ list.innerHTML = PROJECTS.map((p, i) => {
       <span class="p-meta p-role">${esc(p.role || "")}</span>
       <span class="p-toggle" aria-hidden="true"></span>
     </summary>
-    <div class="p-body ${p.image ? "" : "no-image"}">
-      ${p.image ? `<img class="p-cover" src="${esc(p.image)}" alt="${esc(p.imageAlt || "")}" width="1400" height="1050" loading="lazy">` : ""}
+    <div class="p-body ${p.image ? "" : "no-image"} ${p.wideCover ? "wide-cover" : ""}">
+      ${p.image ? `<img class="p-cover" src="${esc(p.image)}" alt="${esc(p.imageAlt || "")}" loading="lazy">` : ""}
       <div class="p-copy">
         <p class="p-desc">${esc(p.description)}</p>
         ${p.features ? `<ul class="p-features">${p.features.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>` : ""}
@@ -28,6 +28,7 @@ list.innerHTML = PROJECTS.map((p, i) => {
         <p class="p-links">
           ${p.liveUrl ? `<a href="${esc(p.liveUrl)}" target="_blank" rel="noopener">Abrir projeto <span aria-hidden="true">↗</span></a>${p.liveNote ? `<span class="p-note">${esc(p.liveNote)}</span>` : ""}` : ""}
           ${p.repoUrl ? `<a href="${esc(p.repoUrl)}" target="_blank" rel="noopener">Código no GitHub <span aria-hidden="true">↗</span></a>` : ""}
+          ${p.fileUrl ? `<a href="${esc(p.fileUrl)}" download>Baixar o fluxo (JSON) <span aria-hidden="true">↓</span></a>` : ""}
         </p>
       </div>
       ${

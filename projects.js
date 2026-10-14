@@ -1,5 +1,5 @@
 // Conteúdo dos projetos, em ordem de destaque. Para adicionar ou editar, mexa só neste arquivo.
-// Campos opcionais: role, features, shots, liveUrl, liveNote, repoUrl.
+// Campos opcionais: role, features, shots, wideCover, liveUrl, liveNote, repoUrl, fileUrl.
 const PROJECTS = [
   {
     title: "Volley Tech",
@@ -64,6 +64,25 @@ const PROJECTS = [
       { src: "img/amazon-estoque/rep_mobile_hero.jpg", caption: "Página inicial no celular" },
     ],
     liveUrl: "https://amazonveiculos.com",
+  },
+  {
+    title: "Lembrete de cobrança por WhatsApp",
+    tagline: "Fluxo de automação no n8n",
+    category: "n8n · Automação",
+    role: "Fluxo demo · dados fictícios",
+    description:
+      "Fluxo que lê as faturas de uma planilha, decide quem deve ser lembrado no dia, envia a mensagem pelo WhatsApp e registra o resultado. Tem um modo de teste com faturas fictícias que roda sem nenhuma credencial e não envia nada, e cada etapa está documentada em notas no próprio canvas.",
+    features: [
+      "Regra de cobrança: lembra 3 dias antes, no dia do vencimento e 3 dias depois; fatura paga é ignorada",
+      "Validação do telefone antes do envio, para o contato inválido sair do fluxo em vez de gerar erro",
+      "Texto diferente para cada situação: lembrete, vencimento no dia e atraso",
+      "Falha da API segue por uma saída de erro e fica registrada na planilha, sem parar os outros envios",
+    ],
+    stack: ["n8n", "Google Sheets", "WhatsApp Cloud API", "JavaScript"],
+    image: "img/n8n/lembrete-cobranca.png",
+    imageAlt: "Canvas do n8n com o fluxo de lembrete de cobrança, em seis etapas anotadas",
+    wideCover: true,
+    fileUrl: "n8n/lembrete-cobranca-whatsapp.json",
   },
   {
     title: "Assistente Pessoal Carla",

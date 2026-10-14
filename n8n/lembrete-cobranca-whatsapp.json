@@ -1,0 +1,632 @@
+{
+  "name": "Lembrete de cobrança por WhatsApp (demo)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "# Lembrete de cobrança por WhatsApp\nLê as faturas de uma planilha, decide quem deve ser lembrado hoje, envia a mensagem e registra o resultado.\n\n**Para testar sem configurar nada:** clique em *Testar com dados de exemplo*. Os dados são fictícios e nenhuma mensagem é enviada.",
+        "width": 700,
+        "height": 200,
+        "color": 7
+      },
+      "id": "532d33c6-23c4-4cfc-acfa-17c73f5c8cd1",
+      "name": "Nota — visão geral",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 1. Gatilhos\n**Produção:** roda de segunda a sábado às 9h e lê a aba *Faturas* (colunas: id, nome, telefone, valor, vencimento, status).\n\n**Teste:** gera 6 faturas fictícias.",
+        "width": 700,
+        "height": 720,
+        "color": 4
+      },
+      "id": "c79d490a-be90-4170-ba19-84f270e8f640",
+      "name": "Nota 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -120,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 2. Regra de cobrança\nIgnora fatura paga. Seleciona quem vence em 3 dias, vence hoje ou venceu há 3 dias. Normaliza o telefone e formata valor e data.",
+        "width": 280,
+        "height": 420,
+        "color": 5
+      },
+      "id": "d34d876a-aabe-4296-9cbc-25365653df9e",
+      "name": "Nota 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        620,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 3. Validação\nSem telefone válido, a fatura sai do fluxo em vez de gerar erro no envio.",
+        "width": 280,
+        "height": 640,
+        "color": 3
+      },
+      "id": "f353f5ed-00ca-492e-90cc-39cdbb9ee201",
+      "name": "Nota 3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        940,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 4. Mensagem\nTexto diferente para cada situação: lembrete, vencimento no dia e atraso.",
+        "width": 280,
+        "height": 420,
+        "color": 6
+      },
+      "id": "9246143a-3a27-41d9-b4fd-43f60cd82baf",
+      "name": "Nota 4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1260,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 5. Envio ou simulação\nNo teste, só monta a prévia. Em produção, chama a API do WhatsApp com intervalo entre os envios. Se a API falhar, o item segue pela saída de erro e o fluxo continua.",
+        "width": 580,
+        "height": 720,
+        "color": 2
+      },
+      "id": "41dde2b1-8980-40c9-ab88-afb3d6449f0c",
+      "name": "Nota 5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 6. Registro\nGrava na planilha a data do último lembrete e o resultado (enviado ou falha, com o motivo).",
+        "width": 580,
+        "height": 560,
+        "color": 4
+      },
+      "id": "630e5c11-34c3-49d0-b29b-fbd9708fe505",
+      "name": "Nota 6",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2200,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * 1-6"
+            }
+          ]
+        }
+      },
+      "id": "d41d5dec-d133-47f3-b3e0-7ef94274b885",
+      "name": "Todo dia às 9h",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "COLE_AQUI_O_ID_DA_PLANILHA",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Faturas",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "id": "b5151b48-6061-4cfa-bfbd-2273244f9868",
+      "name": "Ler faturas",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        300,
+        300
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a70a9f67-84e7-4585-a9df-e325af345bf3",
+      "name": "Testar com dados de exemplo",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Faturas fictícias, com vencimentos calculados a partir de hoje\n// para o teste sempre cair em todas as regras.\nconst dia = (n) => {\n  const d = new Date();\n  d.setDate(d.getDate() + n);\n  const p = (v) => String(v).padStart(2, '0');\n  return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());\n};\n\nconst faturas = [\n  { id: 'F-001', nome: 'Marina Duarte',  telefone: '(53) 99999-0001', valor: 189.9, vencimento: dia(3),  status: 'aberto' },\n  { id: 'F-002', nome: 'Rafael Antunes', telefone: '53 99999-0002',   valor: 250,   vencimento: dia(0),  status: 'aberto' },\n  { id: 'F-003', nome: 'Luiza Peçanha',  telefone: '5553999990003',   valor: 99.5,  vencimento: dia(-3), status: 'aberto' },\n  { id: 'F-004', nome: 'Caio Brandão',   telefone: '(53) 99999-0004', valor: 320,   vencimento: dia(0),  status: 'pago' },\n  { id: 'F-005', nome: 'Helena Prates',  telefone: '',                valor: 140,   vencimento: dia(3),  status: 'aberto' },\n  { id: 'F-006', nome: 'Otávio Lemos',   telefone: '(53) 99999-0006', valor: 75,    vencimento: dia(10), status: 'aberto' },\n];\n\nreturn faturas.map((f) => ({ json: { ...f, modo_teste: true } }));"
+      },
+      "id": "16ed1847-c40f-4f8d-ac67-4e51e9bfcf50",
+      "name": "Faturas de exemplo",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        300,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Decide quem recebe lembrete hoje e prepara os campos da mensagem.\n// Regra: 3 dias antes, no dia do vencimento e 3 dias depois. Fatura paga é ignorada.\nconst REGRAS = { 3: 'vence_em_breve', 0: 'vence_hoje', '-3': 'atrasada' };\n\nconst hoje = new Date();\nhoje.setHours(0, 0, 0, 0);\n\nconst lerData = (valor) => {\n  const s = String(valor ?? '').trim();\n  const br = s.match(/^(\\d{2})\\/(\\d{2})\\/(\\d{4})$/);\n  const iso = s.match(/^(\\d{4})-(\\d{2})-(\\d{2})/);\n  if (br) return new Date(+br[3], +br[2] - 1, +br[1]);\n  if (iso) return new Date(+iso[1], +iso[2] - 1, +iso[3]);\n  return null;\n};\n\nconst saida = [];\n\nfor (const item of $input.all()) {\n  const f = item.json;\n  if (String(f.status ?? '').trim().toLowerCase() === 'pago') continue;\n\n  const venc = lerData(f.vencimento);\n  if (!venc) continue;\n\n  const dias = Math.round((venc - hoje) / 86400000);\n  const situacao = REGRAS[dias];\n  if (!situacao) continue;\n\n  // Telefone: só dígitos, com DDI 55 quando vier apenas DDD + número\n  let telefone = String(f.telefone ?? '').replace(/\\D/g, '');\n  if (telefone.length === 10 || telefone.length === 11) telefone = '55' + telefone;\n  const telefone_valido = telefone.length === 12 || telefone.length === 13;\n\n  saida.push({\n    json: {\n      id: f.id,\n      nome: f.nome,\n      primeiro_nome: String(f.nome ?? '').trim().split(' ')[0],\n      telefone,\n      telefone_valido,\n      situacao,\n      dias_para_vencer: dias,\n      valor_fmt: Number(f.valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }),\n      vencimento_fmt: venc.toLocaleDateString('pt-BR'),\n      modo_teste: Boolean(f.modo_teste),\n    },\n  });\n}\n\nreturn saida;"
+      },
+      "id": "07f7b67d-1001-4100-ab10-fb00c37b785f",
+      "name": "Aplicar regra de cobrança",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        700,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "be2be200-cbfd-4b11-acc5-4720db8e7d17",
+              "leftValue": "={{ $json.telefone_valido }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "aedb23a7-5a3f-4e09-84bf-5cf9aa949c3b",
+      "name": "Telefone válido?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1020,
+        460
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "3bec83a0-ef28-49ad-b642-835ed329123b",
+      "name": "Sem telefone",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        700
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f4673a84-ede1-498d-b29c-7896cb3d18e1",
+              "name": "mensagem",
+              "value": "={{ $json.situacao === 'vence_em_breve' ? `Olá, ${$json.primeiro_nome}! Passando para lembrar que a sua fatura de ${$json.valor_fmt} vence em ${$json.vencimento_fmt}. Se já pagou, pode desconsiderar esta mensagem.` : $json.situacao === 'vence_hoje' ? `Olá, ${$json.primeiro_nome}! A sua fatura de ${$json.valor_fmt} vence hoje (${$json.vencimento_fmt}). Qualquer dúvida, é só responder por aqui.` : `Olá, ${$json.primeiro_nome}! Não identificamos o pagamento da fatura de ${$json.valor_fmt}, vencida em ${$json.vencimento_fmt}. Se precisar de uma segunda via, é só responder por aqui.` }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "fd3290dc-6dda-45ce-842c-91623e9bc05f",
+      "name": "Montar mensagem",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1340,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9bcf3676-8cc8-49e2-9734-697dd648858c",
+              "leftValue": "={{ $json.modo_teste }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "2ee6054a-95f5-4b64-8c3b-4d1210608bca",
+      "name": "Modo teste?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1660,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9bd1a5aa-891c-496c-a39d-032a34ec99ee",
+              "name": "resultado",
+              "value": "simulado",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "0cc2e60d-280a-40b4-b00c-2a46af17deb0",
+      "name": "Simular envio",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1960,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Resumo do teste: mostra o que seria enviado, sem enviar nada.\nconst itens = $input.all();\n\nreturn [\n  {\n    json: {\n      modo: 'teste',\n      mensagens_simuladas: itens.length,\n      previa: itens.map((i) => ({ para: i.json.telefone, mensagem: i.json.mensagem })),\n    },\n  },\n];"
+      },
+      "id": "1dacc071-1c28-4e3c-aa54-6995ced39f03",
+      "name": "Resumo do teste",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2280,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/SEU_PHONE_NUMBER_ID/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ messaging_product: \"whatsapp\", to: $json.telefone, type: \"text\", text: { body: $json.mensagem } }) }}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 1500
+            }
+          }
+        }
+      },
+      "id": "d2551685-8287-4b23-9aea-e52890d5a9ca",
+      "name": "Enviar WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1960,
+        520
+      ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8f3368b9-5433-4b08-8a5a-d0a296414dda",
+              "name": "id",
+              "value": "={{ $('Montar mensagem').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "e98e692a-050e-4817-a62a-f708b0621728",
+              "name": "ultimo_lembrete",
+              "value": "={{ $now.toFormat('yyyy-MM-dd') }}",
+              "type": "string"
+            },
+            {
+              "id": "a77dd8fa-da79-423d-88b3-4efe335d6866",
+              "name": "resultado",
+              "value": "enviado",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "e0fdd35c-95cc-4602-8712-6f9459c6e734",
+      "name": "Marcar como enviado",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2280,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "939040ba-d1cb-44aa-ad41-02a6f7fcd135",
+              "name": "id",
+              "value": "={{ $('Montar mensagem').item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "170fa9ca-5700-48db-8a9f-a45be5b8f3af",
+              "name": "ultimo_lembrete",
+              "value": "={{ $now.toFormat('yyyy-MM-dd') }}",
+              "type": "string"
+            },
+            {
+              "id": "da345af8-f0e6-4916-bc64-275e51750003",
+              "name": "resultado",
+              "value": "={{ 'falha: ' + ($json.error?.message ?? 'erro desconhecido') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": false,
+        "options": {}
+      },
+      "id": "136afbf1-4904-4a1f-82fe-1eee78f037a9",
+      "name": "Registrar falha",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2280,
+        640
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "COLE_AQUI_O_ID_DA_PLANILHA",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Faturas",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "d5df28b6-d799-43a0-a14d-a30fef2b6189",
+      "name": "Atualizar planilha",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        2600,
+        520
+      ]
+    }
+  ],
+  "connections": {
+    "Todo dia às 9h": {
+      "main": [
+        [
+          {
+            "node": "Ler faturas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ler faturas": {
+      "main": [
+        [
+          {
+            "node": "Aplicar regra de cobrança",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Testar com dados de exemplo": {
+      "main": [
+        [
+          {
+            "node": "Faturas de exemplo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Faturas de exemplo": {
+      "main": [
+        [
+          {
+            "node": "Aplicar regra de cobrança",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aplicar regra de cobrança": {
+      "main": [
+        [
+          {
+            "node": "Telefone válido?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telefone válido?": {
+      "main": [
+        [
+          {
+            "node": "Montar mensagem",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Sem telefone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Montar mensagem": {
+      "main": [
+        [
+          {
+            "node": "Modo teste?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modo teste?": {
+      "main": [
+        [
+          {
+            "node": "Simular envio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simular envio": {
+      "main": [
+        [
+          {
+            "node": "Resumo do teste",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Marcar como enviado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Registrar falha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar como enviado": {
+      "main": [
+        [
+          {
+            "node": "Atualizar planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Registrar falha": {
+      "main": [
+        [
+          {
+            "node": "Atualizar planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Sao_Paulo"
+  },
+  "pinData": {}
+}
