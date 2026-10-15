@@ -76,6 +76,8 @@ img { display: block; max-width: 100%; }
 .top nav { display: flex; gap: clamp(14px, 3vw, 32px); }
 .top nav a { text-decoration: none; color: var(--ink-2); padding: 6px 0; }
 .top nav a:hover { color: var(--ink); }
+.top nav .lang { padding: 6px 8px; margin: -6px 0; border: 1px solid var(--rule); color: var(--ink); }
+.top nav .lang:hover { border-color: var(--ink); }
 
 main, .foot { max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
 
