@@ -87,6 +87,28 @@ const PROJECTS = [
       "https://www.upwork.com/services/product/development-it-a-custom-n8n-workflow-that-automates-a-repetitive-task-in-your-business-2110171077117765805",
   },
   {
+    title: "Web scraping & data extraction",
+    tagline: "Python bots that turn websites into spreadsheets",
+    category: "Python · Scraping",
+    role: "Upwork service",
+    description:
+      "A Python bot that crawls a website, static or dynamic, collects pages, images and listings, and delivers everything as a clean CSV or Excel file with one row per item. One project covered more than 5,000 pages, each one checked, with zero errors in the validation report.",
+    features: [
+      "Dynamic sites and logins, driven with Playwright",
+      "Images and documents downloaded, renamed by product code and sorted into folders",
+      "Normalized, de-duplicated data, ready to import",
+      "Page-by-page validation report in CSV",
+      "Scheduled runs to keep the dataset up to date",
+    ],
+    stack: ["Python", "Playwright", "CSV", "Excel"],
+    image: "../img/scraping/00_capa.png",
+    imageAlt: "Flow from any website, through a Python bot, to a clean CSV",
+    shots: [
+      { src: "../img/scraping/01_antes_depois.png", caption: "Before and after: messy HTML becomes a table" },
+      { src: "../img/scraping/02_escala.png", caption: "5,000+ pages validated in one project" },
+    ],
+  },
+  {
     title: "Carla, Personal Assistant",
     tagline: "AI assistant for educators",
     category: "Python · AI",

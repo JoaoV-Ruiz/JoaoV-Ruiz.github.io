@@ -87,6 +87,28 @@ const PROJECTS = [
       "https://www.upwork.com/services/product/development-it-a-custom-n8n-workflow-that-automates-a-repetitive-task-in-your-business-2110171077117765805",
   },
   {
+    title: "Web scraping e extração de dados",
+    tagline: "Robôs em Python que viram site em planilha",
+    category: "Python · Scraping",
+    role: "Serviço no Upwork",
+    description:
+      "Robô em Python que percorre um site, estático ou dinâmico, coleta páginas, imagens e anúncios e entrega tudo numa planilha CSV ou Excel limpa, com uma linha por item. Num dos projetos foram mais de 5.000 páginas extraídas, cada uma conferida, sem nenhum erro no relatório de validação.",
+    features: [
+      "Sites dinâmicos e com login, navegados com Playwright",
+      "Download de imagens e documentos, renomeados pelo código do produto e organizados em pastas",
+      "Dados normalizados e sem duplicatas, prontos para importar",
+      "Relatório de validação em CSV, página por página",
+      "Execução agendada para manter a base atualizada",
+    ],
+    stack: ["Python", "Playwright", "CSV", "Excel"],
+    image: "img/scraping/00_capa.png",
+    imageAlt: "Fluxo de um site qualquer, passando por um robô em Python, até um CSV limpo",
+    shots: [
+      { src: "img/scraping/01_antes_depois.png", caption: "Antes e depois: HTML bagunçado vira tabela" },
+      { src: "img/scraping/02_escala.png", caption: "Mais de 5.000 páginas validadas num projeto" },
+    ],
+  },
+  {
     title: "Assistente Pessoal Carla",
     tagline: "Assistente educacional com IA",
     category: "Python · IA",
